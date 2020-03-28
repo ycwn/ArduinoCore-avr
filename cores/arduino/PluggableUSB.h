@@ -57,10 +57,14 @@ public:
   int getDescriptor(USBSetup& setup);
   bool setup(USBSetup& setup);
   void getShortName(char *iSerialNum);
+  bool disableCDC();
+
+  inline bool isCDCEnabled() { return cdcEnabled; }
 
 private:
   uint8_t lastIf;
   uint8_t lastEp;
+  bool    cdcEnabled;
   PluggableUSBModule* rootNode;
 };
 

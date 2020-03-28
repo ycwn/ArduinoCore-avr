@@ -375,7 +375,7 @@ bool ClassInterfaceRequest(USBSetup& setup)
 {
 	u8 i = setup.wIndex;
 
-	if (CDC_ACM_INTERFACE == i)
+	if (CDC_ACM_INTERFACE == i && PluggableUSB().isCDCEnabled())
 		return CDC_Setup(setup);
 
 #ifdef PLUGGABLE_USB_ENABLED
@@ -466,7 +466,8 @@ static u8 SendInterfaces()
 {
 	u8 interfaces = 0;
 
-	CDC_GetInterface(&interfaces);
+	if (PluggableUSB().isCDCEnabled())
+		CDC_GetInterface(&interfaces);
 
 #ifdef PLUGGABLE_USB_ENABLED
 	PluggableUSB().getInterface(&interfaces);

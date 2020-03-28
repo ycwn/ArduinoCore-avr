@@ -97,6 +97,20 @@ bool PluggableUSB_::plug(PluggableUSBModule *node)
 	// restart USB layer???
 }
 
+bool PluggableUSB_::disableCDC()
+{
+	// If either of these were modified, either a module
+	// was plug()'ed or CDC was already disabled
+	if (lastIf != CDC_ACM_INTERFACE + CDC_INTERFACE_COUNT ||
+	    lastEp != CDC_FIRST_ENDPOINT + CDC_ENPOINT_COUNT) {
+		return !cdcEnabled;
+	}
+	lastEp = CDC_FIRST_ENDPOINT;
+	lastIf = CDC_ACM_INTERFACE;
+	cdcEnabled = false;
+	return true;
+}
+
 PluggableUSB_& PluggableUSB()
 {
 	static PluggableUSB_ obj;
@@ -105,6 +119,7 @@ PluggableUSB_& PluggableUSB()
 
 PluggableUSB_::PluggableUSB_() : lastIf(CDC_ACM_INTERFACE + CDC_INTERFACE_COUNT),
                                  lastEp(CDC_FIRST_ENDPOINT + CDC_ENPOINT_COUNT),
+				 cdcEnabled(true),
                                  rootNode(NULL)
 {
 	// Empty
